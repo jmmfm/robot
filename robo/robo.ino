@@ -20,6 +20,9 @@ int MD = 150;
 // --- setup ---
 void setup(void)
 { 
+  Serial.begin(9600);
+  
+  
   int i;  
   for(i=4;i<=7;i++) { pinMode(i, OUTPUT); }
 
@@ -51,8 +54,20 @@ double getDistance(uint16_t value)
 // -----------------------------------------------------------------------------------------
 void loop ()
 {  
-  double proxD = getDistance(analogRead(IRD));
-  double proxE = getDistance(analogRead(IRE));
+    int sensorD = analogRead(IRD);
+    Serial.print(sensorD);
+    Serial.print(" | ");
+    int sensorE = analogRead(IRE);
+    Serial.print(sensorE);
+    Serial.print(" | ");
+
+  double proxD = getDistance(sensorD);
+  double proxE = getDistance(sensorE);
+  
+    Serial.println(proxD);
+    Serial.print(" | ");
+    Serial.println(proxE);
+    Serial.print(" | ");
 
   int ME;
   int MD;
@@ -67,6 +82,11 @@ void loop ()
     ME = 150;
     MD =150;
   }
+
+  Serial.print(MD);
+  Serial.print(" | ");
+  Serial.print(ME);
+  Serial.println();
 
   advance(ME,MD);
 }
