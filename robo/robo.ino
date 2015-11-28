@@ -11,10 +11,13 @@ int IRE = 1; // INFRAVERMELHO ESQUERDO
 
 int velE = 50;
 int velD = 50;
-int velMax = 255;
+int velMax = 80;
 
 int ME = 150;
 int MD = 150;
+
+int max_sensor_D = 739 - 50; // max lido - margem de 50
+int max_sensor_E = 721 - 50; // max lido - margem de 50
 
 
 // --- setup ---
@@ -55,38 +58,51 @@ double getDistance(uint16_t value)
 void loop ()
 {  
     int sensorD = analogRead(IRD);
-    Serial.print(sensorD);
-    Serial.print(" | ");
     int sensorE = analogRead(IRE);
+    
     Serial.print(sensorE);
     Serial.print(" | ");
+    Serial.print(sensorD);
+    Serial.print(" | ");
 
-  double proxD = getDistance(sensorD);
-  double proxE = getDistance(sensorE);
-  
-    Serial.println(proxD);
-    Serial.print(" | ");
-    Serial.println(proxE);
-    Serial.print(" | ");
+//  double proxD = getDistance(sensorD);
+//  double proxE = getDistance(sensorE);
+//    Serial.print(proxE);
+//    Serial.print(" | ");
+//    Serial.print(proxD);
+//    Serial.print(" | ");
 
   int ME;
   int MD;
 
-  if (proxD < 5 || proxD < 5)
-  {
-    int ME = min(velMax, proxD);
-    int MD = min(velMax, proxE);
-  }
-  else
-  {
-    ME = 150;
-    MD =150;
-  }
+if (sensorE > max_sensor_E) MD = 0; else MD = velMax;
+if (sensorD > max_sensor_D) ME = 0; else ME = velMax;
 
+
+//  if (proxE < 5 || proxD < 5)
+//  {
+//    int ME = min(velMax, proxD);
+//    int MD = min(velMax, proxE);
+//  }
+//  else
+//  {
+//    ME = 150;
+//    MD = 150;
+//  }
+  
+  // Serve apenas para ler os maximos dos sensores
+//  if ( sensorD > max_sensor_D ) max_sensor_D = sensorD;
+//  if ( sensorE > max_sensor_E ) max_sensor_E = sensorE;
+
+  Serial.print(ME);
+  Serial.print(" | ");
   Serial.print(MD);
   Serial.print(" | ");
-  Serial.print(ME);
+  Serial.print(max_sensor_E);
+  Serial.print(" | ");
+  Serial.print(max_sensor_D);
   Serial.println();
+  
 
   advance(ME,MD);
 }
